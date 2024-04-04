@@ -1,27 +1,12 @@
-import tensorflow as tf
-from tensorflow.keras import layers, models
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
-from tensorflow.keras.optimizers import Adam
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import models
+from torchvision.models.efficientnet import EfficientNet_B0_Weights
+from torch.utils.tensorboard import SummaryWriter
 
-def data_augmentation(image_height: int = 224,
-                      image_width: int = 224) -> tf.keras.Sequential:
-    """
-    Creates a data augmentation pipeline.
 
-    Returns:
-        tf.keras.Sequential: The data augmentation pipeline.
-    """
-    augment = tf.keras.Sequential([
-        layers.experimental.preprocessing.Resizing(image_height, image_width),
-        layers.experimental.preprocessing.Rescaling(1./255),
-        layers.experimental.preprocessing.RandomFlip("horizontal"),
-        layers.experimental.preprocessing.RandomRotation(0.1),
-        layers.experimental.preprocessing.RandomZoom(0.1),
-        layers.experimental.preprocessing.RandomContrast(0.1),
-    ])
-    return augment
-
-def build_model(num_classes: int = 525) -> models.Model:
+def build_model(num_classes: int = 525) -> nn.Module:
     """
     Builds a CNN model using the EfficientNetB0 architecture with pre-trained weights and custom layers.
 
@@ -29,66 +14,57 @@ def build_model(num_classes: int = 525) -> models.Model:
         num_classes (int): Number of output classes. Default is 525.
 
     Returns:
-        models.Model: The CNN model.
+        nn.Module: The CNN model.
     """
     # Load the pre-trained EfficientNetB0 model
-    pretrained_model = tf.keras.applications.efficientnet.EfficientNetB0(
-        input_shape=(224, 224, 3),
-        include_top=False,
-        weights='imagenet',
-        pooling='max'
-    )
+    weights = EfficientNet_B0_Weights.IMAGENET1K_V1
+    pretrained_model = models.efficientnet_b0(weights=weights)
 
     # Set the pre-trained model to non-trainable
-    pretrained_model.trainable = False
-
-    # Data augmentation
-    augmenter = data_augmentation()
+    for param in pretrained_model.parameters():
+        param.requires_grad = False
 
     # Custom layers on top of the pre-trained model
-    inputs = pretrained_model.input
-    x = augmenter(inputs)
-    x = layers.Dense(128, activation='relu')(pretrained_model.output)
-    x = layers.Dropout(0.45)(x)
-    x = layers.Dense(256, activation='relu')(x)
-    x = layers.Dropout(0.45)(x)
-    outputs = layers.Dense(num_classes, activation='softmax')(x)
-
-    # Create the final model
-    model = models.Model(inputs=inputs, outputs=outputs)
-
-    # Compile the model
-    model.compile(
-        optimizer=Adam(0.0001),
-        loss='categorical_crossentropy',
-        metrics=['accuracy']
+    num_features = pretrained_model.classifier[1].in_features
+    pretrained_model.classifier = nn.Sequential(
+        nn.Linear(num_features, 128),
+        nn.ReLU(),
+        nn.Dropout(0.45),
+        nn.Linear(128, 256),
+        nn.ReLU(),
+        nn.Dropout(0.45),
+        nn.Linear(256, num_classes),
+        nn.Softmax(dim=1)
     )
 
-    return model
+    return pretrained_model
 
-def get_callbacks() -> list:
+
+def get_optimizer(model: nn.Module) -> optim.Optimizer:
     """
-    Creates a list of callbacks for training the model.
+    Creates an optimizer for the model.
 
     Returns:
-        list: A list of callbacks including ModelCheckpoint, EarlyStopping, and ReduceLROnPlateau.
+        optim.Optimizer: The Adam optimizer.
     """
-    # Create checkpoint callback
-    checkpoint_path = "birds_classification_model_checkpoint"
-    checkpoint_callback = ModelCheckpoint(checkpoint_path,
-                                          save_weights_only=True,
-                                          monitor="val_accuracy",
-                                          save_best_only=True)
+    return optim.Adam(model.parameters(), lr=0.0001)
 
-    # Setup EarlyStopping callback
-    early_stopping = EarlyStopping(monitor="val_loss",
-                                   patience=5,
-                                   restore_best_weights=True)
 
-    # Setup ReduceLROnPlateau callback
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss',
-                                  factor=0.2,
-                                  patience=3,
-                                  min_lr=1e-6)
+def get_loss_function() -> nn.Module:
+    """
+    Creates a loss function for the model.
 
-    return [checkpoint_callback, early_stopping, reduce_lr]
+    Returns:
+        nn.Module: The categorical cross-entropy loss function.
+    """
+    return nn.CrossEntropyLoss()
+
+
+def get_callbacks(log_dir: str = "runs/birds_classification") -> SummaryWriter:
+    """
+    Creates a TensorBoard writer for logging training metrics.
+
+    Returns:
+        SummaryWriter: A TensorBoard writer.
+    """
+    return SummaryWriter(log_dir=log_dir)

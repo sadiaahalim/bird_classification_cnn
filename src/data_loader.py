@@ -1,12 +1,10 @@
-from typing import Tuple
-from keras_preprocessing.image import ImageDataGenerator, DirectoryIterator
-import tensorflow as tf
-from tensorflow.keras import layers
-from pathlib import Path
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from helper_functions import walk_through_dir
+from torchvision import transforms, datasets
+from torch.utils.data import DataLoader
+from pathlib import Path
+from typing import Tuple
 
 
 def prepare_dataframes(dataset: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -20,20 +18,15 @@ def prepare_dataframes(dataset: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
         Tuple[pd.DataFrame, pd.DataFrame]: Dataframes for the training and validation datasets.
     """
 
-    walk_through_dir(dataset)
-    image_dir = Path(dataset)
+    image_dir = Path(f'./{dataset}')
+    filepaths = list(image_dir.glob(r'**/*.JPG')) + list(image_dir.glob(r'**/*.jpg')) + list(image_dir.glob(r'**/*.png'))
 
-    # Get filepaths and labels
-    filepaths = list(image_dir.glob(r'**/*.JPG')) + list(image_dir.glob(r'**/*.jpg')) + list(image_dir.glob(r'**/*.png')) + list(image_dir.glob(r'**/*.png'))
     labels = list(map(lambda x: os.path.split(os.path.split(x)[0])[1], filepaths))
-
     filepaths = pd.Series(filepaths, name='Filepath').astype(str)
-    labels = pd.Series(labels, name='Label')
 
-    # Concatenate filepaths and labels
+    labels = pd.Series(labels, name='Label')
     image_df = pd.concat([filepaths, labels], axis=1)
 
-    # Split into train and test dataframes
     train_df, test_df = train_test_split(image_df,
                                          test_size=0.2,
                                          shuffle=True,
@@ -42,9 +35,13 @@ def prepare_dataframes(dataset: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     return train_df, test_df
 
 
-def load_data(train_df: pd.DataFrame, test_df: pd.DataFrame, img_height: int = 224, img_width: int = 224, batch_size: int = 32) -> Tuple[DirectoryIterator, DirectoryIterator]:
+def load_data(train_df: pd.DataFrame,
+              test_df: pd.DataFrame,
+              img_height: int = 224,
+              img_width: int = 224,
+              batch_size: int = 32):
     """
-    Loads and preprocesses the dataset from dataframes.
+    Loads and preprocesses the dataset from dataframes using PyTorch.
 
     Args:
         train_df (pd.DataFrame): DataFrame containing filepaths and labels for the training data.
@@ -54,34 +51,28 @@ def load_data(train_df: pd.DataFrame, test_df: pd.DataFrame, img_height: int = 2
         batch_size (int): Size of the batches of data. Default is 32.
 
     Returns:
-        Tuple[DirectoryIterator, DirectoryIterator]: Training and test data generators.
+        Tuple[DataLoader, DataLoader]: Training and test data loaders.
     """
+    # Define transformations for the training data
+    train_transforms = transforms.Compose([
+        transforms.Resize((img_height, img_width)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # ImageNet normalization
+    ])
 
-    # Training data generator
-    train_datagen = ImageDataGenerator(
-        preprocessing_function=tf.keras.applications.efficientnet.preprocess_input,
-        validation_split=0.2
-        )
-    train_data = train_datagen.flow_from_dataframe(
-        dataframe=train_df,
-        x_col='Filepath',
-        y_col='Label',
-        target_size=(img_height, img_width),
-        batch_size=batch_size,
-        class_mode='categorical'
-    )
+    # Define transformations for the test data
+    test_transforms = transforms.Compose([
+        transforms.Resize((img_height, img_width)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
 
-    # Test data generator
-    test_datagen = ImageDataGenerator(
-        preprocessing_function=tf.keras.applications.efficientnet.preprocess_input,
-    )
-    test_data = test_datagen.flow_from_dataframe(
-        dataframe=test_df,
-        x_col='Filepath',
-        y_col='Label',
-        target_size=(img_height, img_width),
-        batch_size=batch_size,
-        class_mode='categorical'
-    )
+    # Create a custom dataset for the training and test data
+    train_dataset = datasets.ImageFolder(os.path.dirname(train_df['Filepath'].iloc[0]).rsplit('/', 1)[0], transform=train_transforms)
+    test_dataset = datasets.ImageFolder(os.path.dirname(test_df['Filepath'].iloc[0]).rsplit('/', 1)[0], transform=test_transforms)
 
-    return train_data, test_data
+    # Create data loaders
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    return train_loader, test_loader

@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='BirdClassification',
-    version='0.1',
+    version='0.11',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     install_requires=requirements,

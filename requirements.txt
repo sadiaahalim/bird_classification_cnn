@@ -1,7 +1,6 @@
 numpy
 pandas
-tensorflow
+pytorch
+torchvision
 mlflow
-keras
-keras-preprocessing
 scikit-learn
