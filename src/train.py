@@ -28,7 +28,6 @@ def train(model: nn.Module,
     # Set up MLflow tracking
     mlflow.set_experiment(experiment_name)
 
-    mlflow.set_tracking_uri("http://localhost:5000")
 
     # Build the model
     model = model.to(device)
