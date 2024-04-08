@@ -1,21 +1,15 @@
+<!-- templates/index.html -->
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Classifier</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Upload Image</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Upload Image</h1>
-        <form action="/predict" method="post" enctype="multipart/form-data">
-            <label for="file-upload" class="custom-file-upload">
-                <input id="file-upload" type="file" name="file">
-                Choose File
-            </label>
-            <button type="submit">Upload</button>
-        </form>
-    </div>
+    <h1>Upload Image for Classification</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file">
+        <input type="submit" value="Upload">
+    </form>
 </body>
 </html>
