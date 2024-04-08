@@ -11,8 +11,11 @@ def main():
     Main function to prepare dataframes, load the data, train the model, and evaluate it on the test set.
     """
     # Set paths
+    print("Current Working Directory:", os.getcwd())
+
     train_dir = os.path.join('/data', 'train')
-    test_dir = os.path.join('/data', 'test')
+    print(train_dir)
+    test_dir = os.path.join('data', 'test')
     print(test_dir)
     model_path = 'models/bird_classification_model.h5'
 

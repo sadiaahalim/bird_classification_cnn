@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/c0f6c50fd3fe4a8da531794e88a455bd/artifacts
+end_time: 1712552992485
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: c0f6c50fd3fe4a8da531794e88a455bd
+run_name: whimsical-cub-616
+run_uuid: c0f6c50fd3fe4a8da531794e88a455bd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712548248288
+status: 3
+tags: []
+user_id: student

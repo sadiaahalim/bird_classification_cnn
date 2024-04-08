@@ -28,6 +28,8 @@ def train(model: nn.Module,
     # Set up MLflow tracking
     mlflow.set_experiment(experiment_name)
 
+    mlflow.set_tracking_uri("http://localhost:5000")
+
     # Build the model
     model = model.to(device)
 
@@ -40,6 +42,14 @@ def train(model: nn.Module,
 
     # Start an MLflow run
     with mlflow.start_run():
+                # Log parameters
+        mlflow.log_params({
+            "num_classes": num_classes,
+            "epochs": epochs,
+            "device": str(device)
+        })
+        
+        
         for epoch in range(epochs):
             model.train()
             running_loss = 0.0
@@ -79,7 +89,9 @@ def train(model: nn.Module,
             test_accuracy = correct / total
             writer.add_scalar('Epoch/Test Loss', avg_test_loss, epoch)
             writer.add_scalar('Epoch/Test Accuracy', test_accuracy, epoch)
-
+            mlflow.log_metric("Average Test Loss", avg_test_loss, step=epoch)
+            mlflow.log_metric("Test Accuracy", test_accuracy, step=epoch)
+            
             # Print epoch summary
             print(f'Epoch {epoch+1}/{epochs}, Training Loss: {avg_train_loss:.4f}, Test Loss: {avg_test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}')
 
@@ -91,5 +103,9 @@ def train(model: nn.Module,
         torch.save(model.state_dict(), model_save_path)
         print(f'Model saved to {model_save_path}')
 
+        # Log the model as an MLflow artifact
+        mlflow.log_artifact(model_save_path)
+        
+        
         # Close the TensorBoard writer
         writer.close()
