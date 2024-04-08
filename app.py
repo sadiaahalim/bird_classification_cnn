@@ -3,7 +3,7 @@ import os
 import torch
 from PIL import Image
 from torchvision import transforms
-from src.model import build_model  # Make sure this import matches your model's actual location
+from src.model import build_model  # Update this import to your model's architecture file
 
 app = Flask(__name__)
 
@@ -18,21 +18,24 @@ def get_class_names(data_directory):
     class_names = sorted(os.listdir(data_directory))
     return class_names
 
-# Load class names
+# Assuming that the class names ordering is consistent with the training
 class_names = get_class_names('data/train')
 
 # Load your trained model
-def load_model(model_path):
-    model = build_model(num_classes=len(class_names))  # Use the actual number of classes
+def load_model(model_path, num_classes):
+    # Make sure the architecture is identical to the one used during training
+    model = build_model(num_classes=num_classes)
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()
     return model
 
-# Load the model (adjust the path as needed)
-model = load_model('models/bird_classification_model.pth')
+# Load the model (update the path as needed)
+num_classes = len(class_names)  # Ensure this is the correct number of classes
+model = load_model('models/bird_classification_model.pth', num_classes)
 
 # Function to preprocess the uploaded image
 def preprocess_image(image_path):
+    # Make sure these transformations match those used during training
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
@@ -55,9 +58,11 @@ def upload_file():
     if request.method == 'POST':
         # Check if the post request has the file part
         if 'file' not in request.files:
+            print('No file part')
             return redirect(request.url)
         file = request.files['file']
         if file.filename == '':
+            print('No selected file')
             return redirect(request.url)
         if file:
             filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
