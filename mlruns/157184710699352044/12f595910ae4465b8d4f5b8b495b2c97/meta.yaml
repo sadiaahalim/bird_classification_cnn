@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/12f595910ae4465b8d4f5b8b495b2c97/artifacts
+end_time: 1712528910001
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: 12f595910ae4465b8d4f5b8b495b2c97
+run_name: glamorous-worm-741
+run_uuid: 12f595910ae4465b8d4f5b8b495b2c97
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712528675716
+status: 4
+tags: []
+user_id: student

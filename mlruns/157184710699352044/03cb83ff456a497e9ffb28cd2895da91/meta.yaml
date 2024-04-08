@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/03cb83ff456a497e9ffb28cd2895da91/artifacts
+end_time: 1712533739582
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: 03cb83ff456a497e9ffb28cd2895da91
+run_name: defiant-mouse-636
+run_uuid: 03cb83ff456a497e9ffb28cd2895da91
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712528997292
+status: 3
+tags: []
+user_id: student
