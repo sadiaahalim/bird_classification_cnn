@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/9f4a1aae2b07421aa3d5b9bdcf4d1c3f/artifacts
+end_time: 1712563133718
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: 9f4a1aae2b07421aa3d5b9bdcf4d1c3f
+run_name: stately-grouse-812
+run_uuid: 9f4a1aae2b07421aa3d5b9bdcf4d1c3f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712563083088
+status: 4
+tags: []
+user_id: student

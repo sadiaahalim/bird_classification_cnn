@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/41650fb7036d40148f6a905444cd4fe1/artifacts
+end_time: 1712563009143
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: 41650fb7036d40148f6a905444cd4fe1
+run_name: omniscient-fish-762
+run_uuid: 41650fb7036d40148f6a905444cd4fe1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712563001111
+status: 4
+tags: []
+user_id: student

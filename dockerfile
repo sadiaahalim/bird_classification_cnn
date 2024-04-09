@@ -7,8 +7,14 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
+ENV PYTHONPATH "${PYTHONPATH}:/app"
+
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install mlflow tensorboard
+
+ENV MLFLOW_TRACKING_URI=file:/mlflow
+
 # Run train.py when the container launches
-CMD ["python", "src/bad_train.py"]
+CMD ["python", "src/train.py"]

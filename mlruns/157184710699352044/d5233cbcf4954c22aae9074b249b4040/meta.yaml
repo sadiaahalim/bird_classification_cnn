@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/d5233cbcf4954c22aae9074b249b4040/artifacts
+end_time: 1712670096566
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: d5233cbcf4954c22aae9074b249b4040
+run_name: omniscient-mule-588
+run_uuid: d5233cbcf4954c22aae9074b249b4040
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712655896042
+status: 3
+tags: []
+user_id: student

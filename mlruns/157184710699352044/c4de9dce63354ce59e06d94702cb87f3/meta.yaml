@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/c4de9dce63354ce59e06d94702cb87f3/artifacts
+end_time: 1712599250729
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: c4de9dce63354ce59e06d94702cb87f3
+run_name: peaceful-midge-761
+run_uuid: c4de9dce63354ce59e06d94702cb87f3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712594466623
+status: 3
+tags: []
+user_id: student
