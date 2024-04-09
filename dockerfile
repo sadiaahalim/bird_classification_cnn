@@ -14,5 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN pip install mlflow tensorboard
 
+ENV MLFLOW_TRACKING_URI=file:/mlflow
+
 # Run train.py when the container launches
 CMD ["python", "src/train.py"]
