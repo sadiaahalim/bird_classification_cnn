@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/986989cf38d440d5a7400ff7adcd8f07/artifacts
+end_time: 1712673162987
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: 986989cf38d440d5a7400ff7adcd8f07
+run_name: abundant-crane-889
+run_uuid: 986989cf38d440d5a7400ff7adcd8f07
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712672070241
+status: 4
+tags: []
+user_id: student
