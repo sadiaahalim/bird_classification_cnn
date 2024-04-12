@@ -60,3 +60,32 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+
+/* styles.css */
+input[type="file"] {
+    /* Add your styles here */
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    align-items: center;
+
+}
+
+input[type="submit"] {
+    /* Add your styles here */
+    background-color: #7f81f9;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    align-items: center;
+}
+
+input[type="submit"]:hover {
+    background-color: #7f81f9;
+}
