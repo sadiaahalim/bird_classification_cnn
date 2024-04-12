@@ -13,7 +13,7 @@ def train(model: nn.Module,
           test_loader: DataLoader,
           num_classes: int = 525,
           device: str = " cuda",
-          epochs: int = 70, 
+          epochs: int = 150, 
           experiment_name: str = "Bird_Classification") -> None:
     """
     Trains the bird classification model, tracks the training process using MLflow and TensorBoard,

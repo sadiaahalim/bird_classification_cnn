@@ -1,0 +1,15 @@
+artifact_uri: file:///home/student/sadia/bird_classification_cnn/mlruns/157184710699352044/17a416e3161c49bdb5cd68cd83a4c003/artifacts
+end_time: 1712954962506
+entry_point_name: ''
+experiment_id: '157184710699352044'
+lifecycle_stage: active
+run_id: 17a416e3161c49bdb5cd68cd83a4c003
+run_name: abundant-boar-743
+run_uuid: 17a416e3161c49bdb5cd68cd83a4c003
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1712873648225
+status: 3
+tags: []
+user_id: student
